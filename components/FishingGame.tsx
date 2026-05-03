@@ -5,6 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { type Location } from "@/data/locations";
 import { FISH, RARITY_META, type Fish, type Rarity } from "@/data/fish";
 import { useSaveData, type Catch } from "@/lib/storage";
+import {
+  playCast,
+  playSplash,
+  playBite,
+  playReelTick,
+  playDangerPulse,
+  playCatch,
+  playLost,
+} from "@/lib/audio";
 
 type Phase =
   | "idle"
@@ -61,6 +70,19 @@ export default function FishingGame({ location }: { location: Location }) {
   const [danger, setDanger] = useState(false); // ¡tira el pez!
   const [holding, setHolding] = useState(false);
   const [biteHint, setBiteHint] = useState<string>("");
+  const [muted, setMuted] = useState(false);
+
+  const mutedRef = useRef(false);
+  useEffect(() => {
+    mutedRef.current = muted;
+  }, [muted]);
+
+  const sound = useCallback(
+    <T extends unknown[]>(fn: (...args: T) => void, ...args: T) => {
+      if (!mutedRef.current) fn(...args);
+    },
+    []
+  );
 
   const { addCatch, incCasts } = useSaveData();
 
@@ -217,6 +239,7 @@ export default function FishingGame({ location }: { location: Location }) {
         if (Math.abs(s.bobberX - tx) < 2 && Math.abs(s.bobberY - ty) < 2) {
           s.bobberInWater = true;
           s.ripples.push({ x: tx, y: ty, r: 4, o: 0.7 });
+          if (!mutedRef.current) playSplash();
           setPhase("waiting");
         }
       }
@@ -315,6 +338,7 @@ export default function FishingGame({ location }: { location: Location }) {
     let last = performance.now();
     let nextDanger = performance.now() + 1500 + Math.random() * 1500;
     let dangerUntil = 0;
+    let nextReelTick = 0; // ms timestamp para el tick del carrete
     const fish = stateRef.current.fishOnHook;
     const reelTime = fish ? reelTimeForRarity(fish.rarity) : 4;
     const [pMin, pMax] = fish
@@ -329,11 +353,18 @@ export default function FishingGame({ location }: { location: Location }) {
       if (now > nextDanger && !dangerRef.current) {
         const len = 900 + Math.random() * 600;
         dangerUntil = now + len;
+        if (!mutedRef.current) playDangerPulse();
         setDanger(true);
       }
       if (dangerRef.current && now > dangerUntil) {
         setDanger(false);
         nextDanger = now + (pMin + Math.random() * (pMax - pMin)) * 1000;
+      }
+
+      // Tick de carrete mientras se recoge
+      if (holdingRef.current && !dangerRef.current && now > nextReelTick) {
+        if (!mutedRef.current) playReelTick();
+        nextReelTick = now + 120 + Math.random() * 40; // ~8 ticks/s con variación
       }
 
       setProgress((prev) => {
@@ -371,6 +402,7 @@ export default function FishingGame({ location }: { location: Location }) {
           fecha: Date.now(),
         };
         addCatch(c);
+        if (!mutedRef.current) playCatch(fish.rarity);
         setCaught({ fish, pesoKg });
         setPhase("caught");
         stateRef.current.fishOnHook = null;
@@ -378,6 +410,7 @@ export default function FishingGame({ location }: { location: Location }) {
         setHolding(false);
       }
     } else if (progress <= -10) {
+      if (!mutedRef.current) playLost();
       setPhase("lost");
       setBiteHint("Se escapó. ¡Vuelve a lanzar!");
       stateRef.current.fishOnHook = null;
@@ -403,9 +436,10 @@ export default function FishingGame({ location }: { location: Location }) {
     setProgress(0);
     setDanger(false);
     setHolding(false);
+    sound(playCast);
     setPhase("casting");
     incCasts();
-  }, [incCasts]);
+  }, [incCasts, sound]);
 
   // Esperar picada → mordida
   useEffect(() => {
@@ -415,6 +449,7 @@ export default function FishingGame({ location }: { location: Location }) {
       const fish = pickFish(location);
       stateRef.current.fishOnHook = fish;
       stateRef.current.fishSize = 0.7 + Math.random() * 0.7;
+      if (!mutedRef.current) playBite();
       setBiteHint("¡PICA! Toca el botón");
       setPhase("bite");
     }, delay);
@@ -484,12 +519,23 @@ export default function FishingGame({ location }: { location: Location }) {
             {location.nombre}
           </div>
         </div>
-        <a
-          href="/coleccion"
-          className="glass rounded-xl px-3 py-2 text-xs text-sky-100 hover:bg-white/10"
-        >
-          Colección
-        </a>
+        <div className="flex items-start gap-2">
+          <button
+            type="button"
+            onClick={() => setMuted((m) => !m)}
+            className="glass rounded-xl px-3 py-2 text-xs text-sky-100 hover:bg-white/10"
+            aria-label={muted ? "Activar sonido" : "Silenciar"}
+            style={{ touchAction: "manipulation" }}
+          >
+            {muted ? "🔇" : "🔊"}
+          </button>
+          <a
+            href="/coleccion"
+            className="glass rounded-xl px-3 py-2 text-xs text-sky-100 hover:bg-white/10"
+          >
+            Colección
+          </a>
+        </div>
       </div>
 
       {/* Aviso superior */}
