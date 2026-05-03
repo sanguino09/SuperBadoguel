@@ -12,6 +12,8 @@ body {
     Ubuntu, Cantarell, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 * {
@@ -20,6 +22,11 @@ body {
 
 button {
   font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 .water-gradient {

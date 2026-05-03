@@ -14,8 +14,7 @@ export default function Home() {
     : 0;
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      {/* Cielo degradado */}
+    <main className="relative min-h-[100dvh] overflow-hidden">
       <div
         className="absolute inset-0"
         style={{
@@ -24,16 +23,14 @@ export default function Home() {
         }}
       />
 
-      {/* Estrellas / sol del amanecer */}
-      <div className="absolute top-12 right-16 h-28 w-28 rounded-full bg-amber-200/80 blur-2xl" />
-      <div className="absolute top-16 right-20 h-16 w-16 rounded-full bg-amber-100" />
+      <div className="absolute top-8 right-10 h-24 w-24 rounded-full bg-amber-200/80 blur-2xl sm:top-12 sm:right-16 sm:h-28 sm:w-28" />
+      <div className="absolute top-12 right-14 h-12 w-12 rounded-full bg-amber-100 sm:top-16 sm:right-20 sm:h-16 sm:w-16" />
 
-      {/* Siluetas de montañas */}
       <svg
         className="absolute bottom-0 left-0 w-full"
         viewBox="0 0 1440 320"
         preserveAspectRatio="none"
-        style={{ height: "32vh" }}
+        style={{ height: "28vh" }}
       >
         <path
           fill="#1a2a3a"
@@ -46,23 +43,21 @@ export default function Home() {
         />
       </svg>
 
-      {/* Agua reflectante */}
       <div
         className="absolute bottom-0 left-0 right-0"
         style={{
-          height: "18vh",
+          height: "16vh",
           background:
             "linear-gradient(180deg, rgba(20,40,60,0.4) 0%, #07182b 100%)",
         }}
       />
 
-      {/* Contenido */}
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-6 py-16 text-center">
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-4xl flex-col items-center justify-center px-5 py-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-3 text-xs uppercase tracking-[0.3em] text-amber-200/80"
+          className="mb-2 text-[10px] uppercase tracking-[0.25em] text-amber-200/80 sm:text-xs sm:tracking-[0.3em]"
         >
           Para Manuel · Feliz cumpleaños
         </motion.div>
@@ -71,7 +66,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.1 }}
-          className="font-display text-6xl font-bold leading-none text-shadow text-amber-50 sm:text-7xl"
+          className="font-display text-5xl font-bold leading-none text-shadow text-amber-50 sm:text-7xl"
         >
           Pesca Ibérica
         </motion.h1>
@@ -80,11 +75,11 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.6 }}
-          className="mt-6 max-w-xl text-base leading-relaxed text-sky-100/80 sm:text-lg"
+          className="mt-5 max-w-xl text-sm leading-relaxed text-sky-100/80 sm:mt-6 sm:text-lg"
         >
           Tres pantanos de España. Tus cañas, tu paciencia y la suerte del río.
           Pesca, colecciona y vuelve por trofeos a{" "}
-          <span className="text-amber-200">Las Portiñas</span>,{" "}
+          <span className="text-amber-200">La Portiña</span>,{" "}
           <span className="text-amber-200">El Rosarito</span> y{" "}
           <span className="text-amber-200">El Cíjara</span>.
         </motion.p>
@@ -93,18 +88,20 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1 }}
-          className="mt-12 flex flex-col items-center gap-4 sm:flex-row"
+          className="mt-10 flex w-full max-w-xs flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center"
         >
           <Link
             href="/escenarios"
-            className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-amber-300 px-10 py-4 text-lg font-semibold text-stone-900 shadow-2xl shadow-amber-900/40 transition hover:scale-105 hover:bg-amber-200"
+            className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-amber-300 px-8 py-4 text-base font-semibold text-stone-900 shadow-2xl shadow-amber-900/40 transition active:scale-95 sm:px-10 sm:text-lg"
+            style={{ touchAction: "manipulation" }}
           >
             <span className="relative z-10">Empezar a pescar</span>
             <span className="absolute inset-0 shimmer opacity-50" />
           </Link>
           <Link
             href="/coleccion"
-            className="rounded-full border border-sky-200/30 bg-white/5 px-8 py-4 text-base text-sky-100 backdrop-blur transition hover:bg-white/10"
+            className="rounded-full border border-sky-200/30 bg-white/5 px-6 py-3 text-sm text-sky-100 backdrop-blur transition active:scale-95 sm:px-8 sm:py-4 sm:text-base"
+            style={{ touchAction: "manipulation" }}
           >
             Mi colección · {especiesDistintas}/{totalEspecies}
           </Link>
@@ -114,12 +111,12 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.4 }}
-          className="mt-16 grid w-full max-w-2xl grid-cols-3 gap-3 text-left"
+          className="mt-10 grid w-full max-w-2xl grid-cols-3 gap-2 text-left sm:mt-16 sm:gap-3"
         >
           {LOCATIONS.map((loc) => (
             <div
               key={loc.id}
-              className="glass rounded-xl p-3 text-xs text-sky-100/80"
+              className="glass rounded-lg p-2.5 text-[11px] text-sky-100/80 sm:rounded-xl sm:p-3 sm:text-xs"
             >
               <div className="font-semibold text-amber-100">{loc.nombre}</div>
               <div className="mt-1 opacity-70">{loc.region}</div>
@@ -131,7 +128,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.8 }}
-          className="mt-10 text-xs italic text-sky-200/40"
+          className="mt-8 text-[10px] italic text-sky-200/40 sm:mt-10 sm:text-xs"
         >
           Hecho con cariño por tu hermano.
         </motion.div>

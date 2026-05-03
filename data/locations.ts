@@ -15,11 +15,11 @@ export interface Location {
 
 export const LOCATIONS: Location[] = [
   {
-    id: "portinas",
-    nombre: "Las Portiñas",
+    id: "portina",
+    nombre: "La Portiña",
     region: "Talavera de la Reina · Toledo",
     descripcion:
-      "Pequeño embalse cercano al Tajo. Aguas tranquilas entre encinas y juncos, ideales para empezar la jornada al amanecer.",
+      "Pequeño pantano cercano al Tajo. Aguas tranquilas entre encinas y juncos, ideales para empezar la jornada al amanecer.",
     skyTop: "#f8c98e",
     skyBottom: "#f49e5a",
     waterTop: "#7fb3c9",

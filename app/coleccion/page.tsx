@@ -27,18 +27,20 @@ export default function ColeccionPage() {
   const pesoTotal = data.catches.reduce((acc, c) => acc + c.pesoKg, 0);
 
   return (
-    <main className="min-h-screen bg-[#07182b] px-6 py-12">
+    <main className="min-h-[100dvh] bg-[#07182b] px-4 py-8 sm:px-6 sm:py-12">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between sm:mb-8">
           <Link
             href="/"
-            className="text-sm text-sky-200/70 hover:text-sky-100"
+            className="rounded-full bg-white/5 px-3 py-1.5 text-sm text-sky-200/70 hover:text-sky-100"
+            style={{ touchAction: "manipulation" }}
           >
             ← Inicio
           </Link>
           <Link
             href="/escenarios"
-            className="text-sm text-amber-200/80 hover:text-amber-100"
+            className="rounded-full bg-white/5 px-3 py-1.5 text-sm text-amber-200/80 hover:text-amber-100"
+            style={{ touchAction: "manipulation" }}
           >
             Pescar →
           </Link>
@@ -47,16 +49,16 @@ export default function ColeccionPage() {
         <motion.h1
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="font-display text-4xl font-bold text-amber-50 sm:text-5xl"
+          className="font-display text-3xl font-bold text-amber-50 sm:text-5xl"
         >
           Tu colección
         </motion.h1>
-        <p className="mt-2 text-sky-200/70">
+        <p className="mt-2 text-sm text-sky-200/70 sm:text-base">
           Cada pez encontrado queda registrado aquí, con su mejor talla.
         </p>
 
         {/* Estadísticas */}
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 gap-2.5 sm:mt-8 sm:grid-cols-4 sm:gap-3">
           <Stat label="Especies" value={`${especiesDistintas}/${totalEspecies}`} />
           <Stat label="Capturas" value={String(totalCapturas)} />
           <Stat label="Lanzamientos" value={String(data.totalCasts)} />
@@ -65,17 +67,17 @@ export default function ColeccionPage() {
 
         {/* Por escenario */}
         {LOCATIONS.map((loc) => (
-          <section key={loc.id} className="mt-12">
-            <div className="mb-4 flex items-baseline justify-between">
-              <h2 className="font-display text-2xl font-semibold text-amber-100">
+          <section key={loc.id} className="mt-10 sm:mt-12">
+            <div className="mb-3 flex flex-col gap-1 sm:mb-4 sm:flex-row sm:items-baseline sm:justify-between">
+              <h2 className="font-display text-xl font-semibold text-amber-100 sm:text-2xl">
                 {loc.nombre}
               </h2>
-              <span className="text-xs uppercase tracking-wide text-sky-200/50">
+              <span className="text-[10px] uppercase tracking-wide text-sky-200/50 sm:text-xs">
                 {loc.region}
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
               {loc.fishIds.map((fid) => {
                 const fish = FISH[fid];
                 const meta = RARITY_META[fish.rarity];
@@ -138,12 +140,12 @@ export default function ColeccionPage() {
 
         {/* Últimas capturas */}
         {loaded && data.catches.length > 0 && (
-          <section className="mt-14">
-            <h2 className="mb-3 font-display text-2xl font-semibold text-amber-100">
+          <section className="mt-12 sm:mt-14">
+            <h2 className="mb-3 font-display text-xl font-semibold text-amber-100 sm:text-2xl">
               Últimas capturas
             </h2>
-            <div className="overflow-hidden rounded-xl ring-1 ring-white/10">
-              <table className="w-full text-left text-sm">
+            <div className="-mx-4 overflow-x-auto sm:mx-0 sm:overflow-hidden sm:rounded-xl sm:ring-1 sm:ring-white/10">
+              <table className="w-full min-w-[480px] text-left text-sm">
                 <thead className="bg-white/5 text-xs uppercase tracking-wide text-sky-200/60">
                   <tr>
                     <th className="px-4 py-2">Pez</th>
@@ -184,7 +186,7 @@ export default function ColeccionPage() {
           </section>
         )}
 
-        <div className="mt-14 flex justify-between text-xs text-sky-200/40">
+        <div className="mt-12 flex flex-col items-start justify-between gap-3 text-xs text-sky-200/40 sm:mt-14 sm:flex-row sm:items-center">
           <span>Hecho para Manuel · {data.jugador && data.jugador !== "Manuel" ? `Jugador: ${data.jugador}` : ""}</span>
           <button
             type="button"
